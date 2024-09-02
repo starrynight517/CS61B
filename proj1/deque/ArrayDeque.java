@@ -37,8 +37,8 @@ public class ArrayDeque<T>{
     public void addLast(T item){
         if(size == items.length){
             resize();
-        }
-        tail=tail+1;
+        }tail
+        tail=(tail+1+ items.length) % items.length;
         items[tail] = item;
         size+=1;
     }
@@ -48,29 +48,31 @@ public class ArrayDeque<T>{
         if(size == 0){
             return null;
         }
-        head=(head + 1 + items.length) % items.length;
+        T removeditem =items[head];
+        head=(head + 1 ) % items.length;
         size-=1;
-        return items[head-1];
+        return removeditem;
     }
 
     public T removeLast(){
         if(size == 0){
             return null;
         }
-        tail=tail-1;
+        T removeditem =items[tail];
+        tail=(tail-1 ) % items.length;
         size-=1;
-        return items[tail+1];
+        return removeditem;
     }
 
     public T get(int index){
         if(size == 0){
             return null;
         }
-        return items[head+index-1];
+        return items[(head+index)% items.length];
     }
 
     public boolean isEmpty(){
-        return head==tail;
+        return size==0;
     }
 
     public void printDeque(){
