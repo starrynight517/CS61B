@@ -18,7 +18,7 @@ public class ArrayDeque<T>{
     public void resize(){
         T[] newItems = (T[]) new Object[size*2];
         for(int i=0;i<size;i++){
-            newItems[i] = items[(head + i) % size];
+            newItems[i] = items[(head + i) % items.length];
         }
         items = newItems;
         head = 0;
@@ -29,17 +29,17 @@ public class ArrayDeque<T>{
         if(size == items.length){
             resize();
         }
-        head = (head - 1 + items.length) % items.length;
         items[head] = item;
+        head = (head - 1 + items.length) % items.length;
         size+=1;
     }
 
     public void addLast(T item){
         if(size == items.length){
             resize();
-        }tail
-        tail=(tail+1+ items.length) % items.length;
+        }
         items[tail] = item;
+        tail=(tail+1) % items.length;
         size+=1;
     }
 
@@ -59,7 +59,7 @@ public class ArrayDeque<T>{
             return null;
         }
         T removeditem =items[tail];
-        tail=(tail-1 ) % items.length;
+        tail=(tail-1 + items.length) % items.length;
         size-=1;
         return removeditem;
     }
@@ -76,17 +76,10 @@ public class ArrayDeque<T>{
     }
 
     public void printDeque(){
-        if(head<tail)
-        for(int i=head;i<tail;i++) {
-            System.out.print(items[i]+"");
+        for(int i = 0; i < size; i++) {
+            System.out.print(items[(head + i) % items.length] + " ");
         }
-        else{
-            for(int i=head;i<size;i++) {
-                System.out.print(items[i]+"");
-            }
-            for(int i=0;i<tail;i++) {
-                System.out.print(items[i]+"");
-            }
+        System.out.println();
         }
     }
 
@@ -97,11 +90,11 @@ public class ArrayDeque<T>{
     public boolean equals(Object o){
         if(o instanceof ArrayDeque){
             ArrayDeque<T> other = (ArrayDeque<T>) o;
-            if(size!=other.size){
+            if(this.size!=other.size){
                 return false;
             }
             for(int i=0;i<size;i++){
-                if(items[i]!=other.items[i]){
+                if(!this.items[(head + i) % items.length].equals(other.items[(other.head + i) % other.items.length])){
                     return false;
                 }
             }
