@@ -22,15 +22,17 @@ public class ArrayDeque<T>{
         }
         items = newItems;
         head = 0;
-        tail = size;
+        tail = size == 0 ? 0 : size-1;
     }
 
     public void addFirst(T item){
         if(size == items.length){
             resize();
         }
+        if(size!=0){
+            head = (head - 1 + items.length) % items.length;
+        }
         items[head] = item;
-        head = (head - 1 + items.length) % items.length;
         size+=1;
     }
 
@@ -38,8 +40,10 @@ public class ArrayDeque<T>{
         if(size == items.length){
             resize();
         }
+        if (size != 0) {
+            tail = (tail + 1) % items.length;
+        }
         items[tail] = item;
-        tail=(tail+1) % items.length;
         size+=1;
     }
 
@@ -48,10 +52,13 @@ public class ArrayDeque<T>{
         if(size == 0){
             return null;
         }
-        T removeditem =items[head];
-        head=(head + 1 ) % items.length;
+        T removedItem =items[head];
+        items[head] = null;
+        if(size!=1){
+            head=(head + 1 ) % items.length;
+        }
         size-=1;
-        return removeditem;
+        return removedItem;
     }
 
     public T removeLast(){
@@ -59,7 +66,10 @@ public class ArrayDeque<T>{
             return null;
         }
         T removeditem =items[tail];
-        tail=(tail-1 + items.length) % items.length;
+        items[tail] = null;
+        if(size!=1){
+            tail=(tail-1 + items.length) % items.length;
+        }
         size-=1;
         return removeditem;
     }
