@@ -16,7 +16,7 @@ public class ArrayDeque<T>{
     }
 
     public void resize(){
-        T[] newItems = (T[]) new Object[size*2];
+        T[] newItems = (T[]) new Object[items.length*2];
         for(int i=0;i<size;i++){
             newItems[i] = items[(head + i) % items.length];
         }
@@ -43,7 +43,7 @@ public class ArrayDeque<T>{
         size+=1;
     }
 
-    
+
     public T removeFirst(){
         if(size == 0){
             return null;
@@ -80,31 +80,33 @@ public class ArrayDeque<T>{
             System.out.print(items[(head + i) % items.length] + " ");
         }
         System.out.println();
-        }
     }
+
 
     public int size(){
         return size;
     }
 
-    public boolean equals(Object o){
-        if(o instanceof ArrayDeque){
-            ArrayDeque<T> other = (ArrayDeque<T>) o;
-            if(this.size!=other.size){
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArrayDeque<T> other = (ArrayDeque<T>) o;
+        if (this.size != other.size) {
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            T item = this.items[(head + i) % items.length];
+            Object otherItem = other.items[(other.head + i) % other.items.length];
+            if (item == null ? otherItem != null : !item.equals(otherItem)) {
                 return false;
             }
-            for(int i=0;i<size;i++){
-                if(!this.items[(head + i) % items.length].equals(other.items[(other.head + i) % other.items.length])){
-                    return false;
-                }
-            }
-            return true;
         }
-        return false;
+        return true;
     }
 
     public Iterator<T> iterator() {
-        return new ArrayDeque.ArrayIterator();
+        return new ArrayIterator();
     }
 
     private class ArrayIterator implements Iterator<T> {
@@ -124,5 +126,7 @@ public class ArrayDeque<T>{
 
         }
     }
-
 }
+
+
+
