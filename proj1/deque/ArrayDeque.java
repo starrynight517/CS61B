@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T>{
+public class ArrayDeque<T> implements Deque<T>{
     private T[] items;
     private int head;
     private int tail;
@@ -15,8 +15,8 @@ public class ArrayDeque<T>{
         tail = 0;
     }
 
-    public void resize(){
-        T[] newItems = (T[]) new Object[items.length*2];
+    public void resize(int resizeNumber){
+        T[] newItems = (T[]) new Object[resizeNumber];
         for(int i=0;i<size;i++){
             newItems[i] = items[(head + i) % items.length];
         }
@@ -25,9 +25,10 @@ public class ArrayDeque<T>{
         tail = size == 0 ? 0 : size-1;
     }
 
+    @Override
     public void addFirst(T item){
         if(size == items.length){
-            resize();
+            resize(items.length*2);
         }
         if(size!=0){
             head = (head - 1 + items.length) % items.length;
@@ -36,9 +37,10 @@ public class ArrayDeque<T>{
         size+=1;
     }
 
+    @Override
     public void addLast(T item){
         if(size == items.length){
-            resize();
+            resize(items.length*2);
         }
         if (size != 0) {
             tail = (tail + 1) % items.length;
@@ -47,7 +49,7 @@ public class ArrayDeque<T>{
         size+=1;
     }
 
-
+    @Override
     public T removeFirst(){
         if(size == 0){
             return null;
@@ -58,9 +60,13 @@ public class ArrayDeque<T>{
             head=(head + 1 ) % items.length;
         }
         size-=1;
+        if(size<items.length/4){
+            resize(items.length/2);
+        }
         return removedItem;
     }
 
+    @Override
     public T removeLast(){
         if(size == 0){
             return null;
@@ -71,9 +77,13 @@ public class ArrayDeque<T>{
             tail=(tail-1 + items.length) % items.length;
         }
         size-=1;
+        if(size<items.length/4){
+            resize(items.length/2);
+        }
         return removeditem;
     }
 
+    @Override
     public T get(int index){
         if(size == 0){
             return null;
@@ -81,10 +91,8 @@ public class ArrayDeque<T>{
         return items[(head+index)% items.length];
     }
 
-    public boolean isEmpty(){
-        return size==0;
-    }
 
+    @Override
     public void printDeque(){
         for(int i = 0; i < size; i++) {
             System.out.print(items[(head + i) % items.length] + " ");
@@ -92,7 +100,7 @@ public class ArrayDeque<T>{
         System.out.println();
     }
 
-
+    @Override
     public int size(){
         return size;
     }

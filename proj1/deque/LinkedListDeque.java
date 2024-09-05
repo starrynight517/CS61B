@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T>{
+public class LinkedListDeque<T> implements Deque<T> {
     private Node sentinel;
     private int size;
 
@@ -19,6 +19,7 @@ public class LinkedListDeque<T>{
         size = 0;
     }
 
+    @Override
     public void addFirst(T item){
         Node newNode = new Node();
         newNode.item = item;
@@ -29,6 +30,7 @@ public class LinkedListDeque<T>{
         size += 1;
     }
 
+    @Override
     public void addLast(T item){
         Node newNode = new Node();
         newNode.item = item;
@@ -39,14 +41,12 @@ public class LinkedListDeque<T>{
         size += 1;
     }
 
-    public boolean isEmpty(){
-        return sentinel.next == sentinel;
-    }
-
+    @Override
     public int size(){
         return size;
     }
 
+    @Override
     public void printDeque(){
         Node p=sentinel.next;
         while(p!=sentinel){
@@ -56,6 +56,7 @@ public class LinkedListDeque<T>{
         System.out.println();
     }
 
+    @Override
     public T removeFirst(){
         if(isEmpty()){
             return null;
@@ -67,6 +68,7 @@ public class LinkedListDeque<T>{
         return item;
     }
 
+    @Override
     public T removeLast(){
         if(isEmpty()){
             return null;
@@ -78,6 +80,7 @@ public class LinkedListDeque<T>{
         return item;
     }
 
+    @Override
     public T get(int index){
         Node p=sentinel.next;
         while(p!=sentinel){
@@ -103,6 +106,7 @@ public class LinkedListDeque<T>{
         }
     }
 
+    @Override
     public boolean equals(Object o){
         if(o instanceof LinkedListDeque){
             LinkedListDeque l=(LinkedListDeque)o;
