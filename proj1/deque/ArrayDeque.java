@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     private T[] items;
     private int head;
     private int tail;
@@ -15,7 +15,7 @@ public class ArrayDeque<T> implements Deque<T>{
         tail = 0;
     }
 
-    public void resize(int resizeNumber){
+    private void resize(int resizeNumber){
         T[] newItems = (T[]) new Object[resizeNumber];
         for(int i=0;i<size;i++){
             newItems[i] = items[(head + i) % items.length];
@@ -106,22 +106,26 @@ public class ArrayDeque<T> implements Deque<T>{
     }
 
 
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ArrayDeque<T> other = (ArrayDeque<T>) o;
-        if (this.size != other.size) {
-            return false;
+        if (this == o){
+            return true;
         }
-        for (int i = 0; i < size; i++) {
-            T item = this.items[(head + i) % items.length];
-            Object otherItem = other.items[(other.head + i) % other.items.length];
-            if (item == null ? otherItem != null : !item.equals(otherItem)) {
+        if (o instanceof Deque) {
+            Deque<T> target = (Deque<T>) o;
+            if (target.size() != size) {
                 return false;
             }
+            for (int i = 0; i < size; i++) {
+                if (!target.get(i).equals(this.get(i))) {
+                    return false;
+                }
+            }
+            return true;
         }
-        return true;
+        return false;
     }
+
 
     public Iterator<T> iterator() {
         return new ArrayIterator();

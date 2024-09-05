@@ -2,11 +2,11 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
     private Node sentinel;
     private int size;
 
-    public class Node{
+    private class Node{
         public T item;
         Node next;
         Node prev;
@@ -81,15 +81,17 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     @Override
-    public T get(int index){
-        Node p=sentinel.next;
-        while(p!=sentinel){
-            if(p.item.equals(index)){
-                return p.item;
-            }
+    public T get(int index) {
+        if (index<0 || index >=size) {
+            return null;
         }
-        return null;
+        Node p = sentinel.next;
+        for (int i=0; i <index; i++) {
+            p = p.next;
+        }
+        return p.item;
     }
+
 
     public T getRecursive(int index) {
         if (index < 0 || index >= size) {
@@ -107,50 +109,55 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o instanceof LinkedListDeque){
-            LinkedListDeque l=(LinkedListDeque)o;
-            if(size!=l.size){
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o instanceof Deque) {
+            Deque<T> target = (Deque<T>) o;
+            if (target.size() != size) {
                 return false;
             }
-            Node p=this.sentinel.next;
-            Node q=l.sentinel.next;
-            while(p!=sentinel){
-                if(!p.item.equals(q.item)){
+            for (int i = 0; i < size; i++) {
+                if (!target.get(i).equals(this.get(i))) {
                     return false;
                 }
-                p=p.next;
-                q=q.next;
             }
-            }
-        else{
-            return false;
-
+            return true;
         }
-        return true;
+        return false;
     }
 
+
+
+
+
+
+    @Override
     public Iterator<T> iterator() {
         return new LinkedListIterator();
     }
 
     private class LinkedListIterator implements Iterator<T> {
-        private int wizPos;
+        private Node current;
+
         public LinkedListIterator() {
-            wizPos=0;
+            current = sentinel.next;  // 从第一个元素开始
         }
 
+        @Override
         public boolean hasNext() {
-            return wizPos < size;
+            return current != sentinel;
         }
 
+        @Override
         public T next() {
-            T returnItem = get(wizPos);
-            wizPos += 1;
+            T returnItem = current.item;
+            current = current.next;
             return returnItem;
-
         }
     }
+
 
 
 
